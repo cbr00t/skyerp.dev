@@ -1,0 +1,109 @@
+.MQHatYonetimi.masterListe.part .header .islemTuslari button#tumEkNotlar.yeni-not.jqx-fill-state-normal {
+	color: #333; background-color: #608ad3; animation: 1000ms cubic-bezier(0.1, 0, 1, 1) 0ms infinite normal yeni-not }
+/*@keyframes yeni-not { 50% { background-color: #60c1d3 } }*/
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * { --height-alt: 60px; --width-ust-sag: 30px; --width-alt-sag: 170px; --etiket-width: 25px; height: var(--full) }
+/*.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > *:not(.jqx-grid-cell-pinned):not(.jqx-grid-cell-selected) { background: whitesmoke }*/
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > *:not(.jqx-grid-cell-pinned) { border: 1px solid #aaa }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell { }
+body.dark-theme .MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell .grid-cell-group,
+	body.dark-theme .MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell .islemTuslari { filter: invert(1) hue-rotate(180deg) }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell .grid-cell-group { background-color: #222 !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell .islemTuslari { }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td,
+	.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td textarea,
+	.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td input { color: whitesmoke; background: #222 !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td textarea { border: none }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td .notlar {
+	--height: 50%; font-size: 128%; position: relative; width: calc(var(--full) - 20px); height: var(--height); left: 5px; bottom: calc(var(--height) + 18px); z-index: 13 }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell table { --buttonPanel-width: 330px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td.groupText { }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td.islemTuslari { width: var(--buttonPanel-width) !important; padding-left: 30px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td.islemTuslari .item > button:not(:hover):not(:focus):not(:active) { }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td.islemTuslari .item > button:not(:last-child) { }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td.islemTuslari button { text-align: left; width: 80px; height: 40px; margin-right: 13px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td.islemTuslari button:not(:last-child) { margin-block-end: 5px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td.islemTuslari button:not(:hover):not(:focus):not(:active) { color: #aaa }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td.islemTuslari button:hover,
+	.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td.islemTuslari button:focus,
+	.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td.islemTuslari button:active { color: white; background: unset !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td.islemTuslari button:focus,
+	.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td.islemTuslari button:active { color: #93a9e9 }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td button,
+	.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td > input,
+	.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td > textarea { padding: 10px 0 0 10px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > .jqx-grid-group-cell > table td > textarea { color: lightgreen }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .ust-alt { width: var(--full) }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .ust-alt table, .MQHatYonetimi.masterListe.part .jqx-grid [role = row] .ust-alt table tr { width: var(--full) }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .ust-alt table tr > td { padding: 0 5px; line-height: 15px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .ust { height: calc(var(--full) - (var(--height-alt) + 10px)); padding-top: 5px; overflow-x: hidden !important; overflow-y: auto !important; z-index: 1001 !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .alt { height: var(--height-alt); border-top: 1px dotted #dcdcdc; margin-top: -5px; z-index: 1000 !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .sol-sag { height: var(--full) }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .ust .sol  { width: calc(var(--full) - (var(--width-ust-sag) + 6px)) !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .ust .sag { width: var(--width-ust-sag) !important; text-align: right }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .alt .sol  { width: calc(var(--full) - (var(--width-alt-sag) + 6px)) !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .alt .sag { width: var(--width-alt-sag) !important; text-align: right; padding-right: 13px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * button { font-weight: bold; z-index: 10; padding: 0 !important; background: unset }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * button:hover { background-color: #ccd9ff }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * button:active { color: whitesmoke; background-color: royalblue }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .ust-alt button { width: 100px; height: 40px; margin-block-end: 3px; border-radius: 8px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .ust-alt .item button { width: 40px; height: 30px; box-shadow: none }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .ust .item button:not(hover):not(focus):not(active) { color: #333 }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .alt .item button:not(hover):not(focus):not(active) { color: #ccc }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .alt .item button:hover { color: #eee; background-color: inherit; text-decoration: underline }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .alt .item button:active { font-weight: bold; color: #89cafa; background-color: inherit !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .item { width: var(--full); margin-block-end: 5px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .item:not(.flex-row) { width: var(--full) }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .etiket { color: #555; width: var(--etiket-width) }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .veri { color: royalblue; width: var(--full) }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .flex-row > .veri { width: calc(var(--full) - var(--etiket-width) - 100px) !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .hat { color: #333 !important; background-color: #333 }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .hat .veri { font-weight: bold; font-size: 130%; color: #eee }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .tezgah > * { position: relative }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .tezgah .ip { font-weight: bold; font-size: 95%; color: steelblue; min-width: 70px; left: 8px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .tezgah .siradakiIsSayi { font-size: 95%; color: #333; min-width: 33px; left: 15px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .tezgah .siradakiIsSayi > ._veri { font-weight: bold; color: orangered }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .tezgah .ekBilgi {
+	font-weight: bold; font-size: 90%; text-align: center; color: whitesmoke !important; background: #3c2020;
+	left: 15px; top: -5px; width: 130px !important; max-height: 30px !important; padding: 8px 3px; line-height: 13px;
+	overflow-y: auto; animation: 250ms cubic-bezier(0.1, 0, 1, 1) 0ms infinite normal ekBilgi-bg; cursor: pointer
+}
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .tezgah .zamanEtuduText { font-weight: bold; font-size: 120%; color: forestgreen; top: -3px; left: 13px; padding: 3px 3px; border: 3px solid limegreen }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe { height: 55px; z-index: 4 }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * { width: var(--full); height: var(--full); border: 1px dotted #dcdcdc; padding: 3px 0 0 15px !important; overflow-y: hidden !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > *.jqx-grid-cell-selected .isListe > * { border: 1px solid #999; overflow-y: overlay !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li { font-size: 75% !important; color: #333; line-height: 13px; margin: 0; padding: 0; margin-block-end: 5px; margin-bottom: -40px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li:not(:last-child) { box-sizing: border-box }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .item { vertical-align: top !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .flex-row > .item { width: unset; min-width: 30px; max-width: 110px; white-space: pre-wrap !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .flex-row > .item:not(:last-child) { padding-right: 5px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li:hover, .MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li:focus { cursor: default; background-color: #eaedf6 !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .kod { font-weight: bold; color: slateblue }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .aciklama { }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .color.item { min-width: unset !important; width: 3px !important; height: 40px; margin: 0 3px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .emir.item { min-width: unset !important; max-width: 80px !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .saymaSayilari, .MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .sureler { top: -28px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .saymaSayilari.item { text-align: right; max-width: 60px !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .saymaSayilari.item > * { font-weight: bold; font-size: 100%; color: mediumvioletred }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .sureler.item { text-align: right; max-width: 80px !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .sureler.item > * { font-weight: bold; font-size: 100%; color: #238b66 }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .sureler.item .ek-bilgi { font-weight: normal; color: #333 }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .sureler.item > .basZamanTS { color: rebeccapurple }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .isListe > * > li .sureler.item > .ayrilmaSure { color: orangered }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .miktarVeGSC > * > * { width: max-content !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .miktarVeGSC > *> *:not(:last-child) { margin-inline-end: 13px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .miktarVeGSC th, .MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .miktarVeGSC td { text-align: right; padding: 0 8px; border: 1px dotted #ddd }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .miktarVeGSC tr > * { font-weight: bold }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .miktarVeGSC th { color: #333 }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .miktarVeGSC td { color: royalblue }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .miktarVeGSC td.net { font-size: 120%; font-weight: bold; color: forestgreen }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .aktifIsSayi { font-size: 120%; font-weight: bold; text-align: right; position: absolute; top: 20px; right: 13px; margin-left: 5px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .aktifIsSayi > .veri { color: lightseagreen !important; margin-right: 3px }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .alt { font-size: 230%; font-weight: bold; color: #ddd; background-color: #333 }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .alt button { font-size: 50% !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > *.jqx-grid-cell-selected .alt { filter: contrast(.8) }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .alt .durumText { padding: 15px 13px; color: unset }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .alt .nedenText { font-size: 50%; top: -3px; left: -8px; color: #eca !important }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .grafik-parent { position: absolute; margin-top: -3px; right: 10px; opacity: .5; height: 50px !important; overflow-y: clip }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > * .grafik-parent > * { }
+.MQHatYonetimi.masterListe.part .jqx-grid [role = row] > *.jqx-grid-cell-selected .grafik-parent { opacity: 1 }
+.MQHatYonetimi.masterListe.part .butonlar.part > .sag > button:nth-last-child(2) { margin-left: unset }

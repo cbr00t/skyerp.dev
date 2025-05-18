@@ -1,0 +1,176 @@
+.hatYonetimi.part { --header-height: var(--islemTuslari-height); font-size: var(--full); overflow-y: hidden !important }
+.hatYonetimi.part > .header { height: var(--header-height) !important; background-color: #ccc !important }
+body.dark-theme .hatYonetimi.part > .header { background-color: #eee !important }
+.hatYonetimi.part > .header .islemTuslari button { font-size: 95% }
+.hatYonetimi.part .content {
+	 --padding-x: 0px; --padding-y: 0px;
+	width: calc(var(--full) - var(--padding-x) * 2); height: calc(var(--full) - (var(--header-height) + var(--padding-y) * 2 + 5px)) !important;
+	padding: var(--padding-y) var(--padding-x); overflow-y: auto !important
+}
+.hatYonetimi.part .header .islemTuslari button#tumEkNotlar.yeni-not.jqx-fill-state-normal {
+	color: #333; background-color: #608ad3; animation: 1000ms cubic-bezier(0.1, 0, 1, 1) 0ms infinite normal yeni-not }
+@keyframes yeni-not { 50% { background-color: #60c1d3 } }
+.hatYonetimi.part .content .liste { --padding-x: 3px; --padding-y: 5px; font-size: 80%; background-color: #ddd; padding-bottom: 300px }
+body.dark-theme .hatYonetimi.part .content .liste { background-color: #eee }
+.hatYonetimi.part .content .liste .hat.item, .hatYonetimi.part .content .liste .tezgah.item { position: relative }
+.hatYonetimi.part .content .liste .hat.item { width: var(--full); margin-bottom: 15px }
+.hatYonetimi.part .content .liste .hat.item > .grup {
+	--grup-padding-x: 10px; --title-padding-left: 450px; --grup-islemTuslari-width: 300px; --grup-islemTuslari-padding-right: 5px;
+	background-color: #333 !important; width: calc(var(--full) - (var(--grup-padding-x) * 2)); height: 200px; padding: 5px var(--grup-padding-x)
+}
+.hatYonetimi.part .content .liste .hat.item > .grup, .hatYonetimi.part .content .liste .tezgah.item { cursor: pointer }
+.hatYonetimi.part .content .liste .hat.item.toggled > .grup { max-height: 50px !important }
+.hatYonetimi.part .content .liste .hat.item > .grup:focus, .hatYonetimi.part .content .liste .hat.item > .grup:active { height: 250px }
+.hatYonetimi.part .content .liste .hat.item.toggled > .grup > .grup-islemTuslari { display: none }
+.hatYonetimi.part .content .liste .hat.item.toggled > .grup > .title * { color: #555 !important }
+.hatYonetimi.part .content .liste .hat.item.toggled > .tezgahlar { display: none !important }
+.hatYonetimi.part .content .liste .hat.item > .grup .title {
+	font-weight: bold; font-size: 220%; color: #ccc; position: relative; height: var(--full);
+	width: calc(var(--full) - (var(--title-padding-left) + var(--grup-islemTuslari-width) + var(--grup-islemTuslari-padding-right)));
+	padding-left: var(--title-padding-left)
+}
+.hatYonetimi.part .content .liste .hat.item > .grup .grup-islemTuslari {
+	font-size: 130%; text-align: right; position: relative; width: var(--grup-islemTuslari-width); height: var(--full);
+	padding: 5px var(--grup-islemTuslari-padding-right) 0 0; background-color: #33333315; box-sizing: border-box
+}
+.hatYonetimi.part .content .liste .hat.item > .grup .grup-islemTuslari > *:not(:last-child) { margin-right: 5px }
+.hatYonetimi.part .content .liste .hat.item > .grup .grup-islemTuslari > button { text-align: center; width: 90px; line-height: 30px; background-color: unset !important }
+.hatYonetimi.part .content .liste .hat.item > .grup .grup-islemTuslari > button:hover { color: white!important }
+.hatYonetimi.part .content .liste .hat.item > .grup .grup-islemTuslari > button:active { color: cyan !important }
+body.dark-theme .hatYonetimi.part .content .liste .hat.item > .grup { filter: invert(1) hue-rotate(180deg) !important }
+/*body.dark-theme .hatYonetimi.part .content .liste .hat.item > .grup .title { filter: invert(1) hue-rotate(180deg) !important }*/
+body.dark-theme .hatYonetimi.part .content .liste .hat.item > .grup { filter: invert(1) hue-rotate(180deg); color: #aaa; background-color: #1a1a1f !important }
+body.dark-theme .hatYonetimi.part .content .liste .hat.item > .grup:hover, body.dark-theme .hatYonetimi.part .content .liste .hat.item > .grup:focus { opacity: .8 }
+.hatYonetimi.part .content .liste .tezgahlar { }
+.hatYonetimi.part .content .liste .tezgah.item {
+	--sol-width: 40px; --alt-height: 33px;
+	width: calc(var(--full) / var(--box-cols) - /*(var(--padding-x) * 2.9)*/ 1px); height: calc(15px + 10px * var(--box-rows)); line-height: 15px;
+	border: 1px solid #b3b3b3; padding: var(--padding-y) var(--padding-x); padding-bottom: 0 !important; box-sizing: border-box; overflow: hidden
+}
+.hatYonetimi.part .content .liste .tezgah.item .sol { width: var(--sol-width) }
+.hatYonetimi.part .content .liste .tezgah.item .sag { width: calc(var(--full) - var(--sol-width)) }
+.hatYonetimi.part .content .liste .tezgah.item .sol button { vertical-align: top; margin-top: -5px !important }
+.hatYonetimi.part .content .liste .tezgah.item .sub-item { position: relative; gap: 10px; min-height: 20px; margin-bottom: 1px }
+.hatYonetimi.part .content .liste .tezgah.item:hover { background-color: #4169e115 }
+.hatYonetimi.part .content .liste .tezgah.item .ip { color: royalblue }
+.ledDurum-parent .ledDurum, .ledDurum-item {
+	--led-color: transparent; width: 28px; height: 28px;
+	background: radial-gradient(var(--led-color) 50%, transparent 70%); border: 1px solid #aaaaaa55; border-radius: 100px; opacity: .7; cursor: pointer
+}
+.ledDurum-item, .ledDurum {
+	font-weight: bold; font-size: 120%; text-align: center; align-content: center; position: relative;
+	background-size: contain !important; background-position: center !important; background-repeat: no-repeat !important
+}
+.ledDurum-item { border-radius: 10px }
+.hatYonetimi.part .content .liste .tezgah.item .ledDurum-parent { position: absolute; top: 3px; right: 10px; z-index: 101 !important }
+.hatYonetimi.part .content .liste .tezgah.item .ledDurum { opacity: .5 } .tezgah.item.selected .ledDurum { opacity: 1 }
+body.dark-theme .ledDurum { filter: invert(1) hue-rotate(180deg) contrast(1) }
+.ledDurum-parent .ledDurum:hover { box-shadow: 0px 0px 10px 3px whitesmoke; opacity: .9 }
+.ledDurum-parent .ledDurum:active, .ledDurum-item.selected .ledDurum { box-shadow: 0px 0px 13px 8px lightcyan; opacity: 1 !important }
+[data-led = error] .ledDurum { background: unset; color: darkred; border: 1px solid #555 }
+[data-led = error] .ledDurum:after { content: 'X' }
+.ledDurum-item[data-led = progress] { pointer-events: none !important }
+[data-led = progress] .ledDurum {
+	border: 1px solid purple; background: unset !important; background-image: url(../../../images/loading.gif) !important; background-size: 22px !important;
+	background-position: center !important; background-repeat: no-repeat !important
+}
+[data-led = KAPALI] .ledDurum { background: unset; color: #555; border: 1px solid #888 }
+[data-led = KAPALI] .ledDurum:after { content: '-' }
+[data-led = KIRMIZI] .ledDurum { --led-color: red }
+[data-led = YESIL] .ledDurum { --led-color: green }
+[data-led = SARI] .ledDurum { --led-color: orange }
+[data-led = MAVI] .ledDurum { --led-color: royalblue }
+[data-led = BEYAZ] .ledDurum { --led-color: white }
+[data-led = SIYAH] .ledDurum { --led-color: #333 }
+.hatYonetimi.part .content .liste .tezgah.item.selected { background-color: #4169e133 }
+.hatYonetimi.part .content .liste .item .kod { font-weight: normal !important; color: #888 }
+.hatYonetimi.part .content .liste .item .etiket { font-weight: normal !important; color: #aaa }
+.hatYonetimi.part .content .liste .item .veri { font-weight: bold }
+.hatYonetimi.part .content .liste .tezgah.item .ip { font-weight: bold; font-size: 95%; color: steelblue; min-width: 70px; left: 8px }
+.hatYonetimi.part .content .liste .tezgah.item .siradakiIsSayi { font-size: 95%; color: #333; min-width: 33px; left: 15px }
+.hatYonetimi.part .content .liste .tezgah.item .siradakiIsSayi > ._veri { font-weight: bold; color: orangered }
+.hatYonetimi.part .content .liste .tezgah.item .ekBilgi {
+	font-weight: bold; font-size: 90%; text-align: center; color: whitesmoke !important; background-color: #3c2020;
+	left: 15px; top: -5px; width: 130px !important; max-height: 30px !important; padding: 8px 3px; line-height: 13px;
+	overflow-y: auto; animation: 250ms cubic-bezier(0.1, 0, 1, 1) 0ms infinite normal ekBilgi-bg; cursor: pointer
+}
+.hatYonetimi.part .content .liste .tezgah.item .zamanEtuduText { position: absolute; font-weight: bold; font-size: 110%; color: forestgreen; bottom: 15px; left: 3px; padding: 1px; border: 3px solid limegreen; opacity: .8 }
+.hatYonetimi.part .content .liste .tezgah.item .isListe { height: 55px; z-index: 4; font-size: 95% }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * { width: var(--full); height: var(--full); border: 1px dotted #dcdcdc; padding: 1px 0 0 13px !important; overflow-y: hidden !important }
+.hatYonetimi.part .content .liste .tezgah.item.selected .isListe > * { border: 1px solid #999; overflow-y: overlay !important }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li { font-size: 75% !important; color: #333; line-height: 13px; margin: 0 0 0 -3px; padding: 0; margin-block-end: 5px; margin-bottom: -40px }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li:not(:last-child) { box-sizing: border-box }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .item { vertical-align: top !important }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .flex-row > .item { width: unset; min-width: 30px; max-width: 100px; white-space: pre-wrap !important }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .flex-row > .item:not(:last-child) { padding-right: 0 }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li:hover, .hatYonetimi.part .content .liste .tezgah.item .isListe > * > li:focus { cursor: default; background-color: #eaedf6 !important }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .kod { font-weight: bold; color: slateblue }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .aciklama { }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .color.item { min-width: unset !important; width: 3px !important; height: 40px; margin: 0 2px }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .emir.item { min-width: unset !important; max-width: 80px !important }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .saymaSayilari, .hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .sureler { position: relative; top: -28px }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .saymaSayilari.item { text-align: right; max-width: 60px !important }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .saymaSayilari.item > * { font-weight: bold; font-size: 100%; color: mediumvioletred }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .sureler.item { text-align: right; max-width: 80px !important }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .sureler.item > * { font-weight: bold; font-size: 100%; color: #238b66 }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .sureler.item .ek-bilgi { font-weight: normal; color: #333 }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .sureler.item > .basZamanTS { color: rebeccapurple }
+.hatYonetimi.part .content .liste .tezgah.item .isListe > * > li .sureler.item > .ayrilmaSure { color: orangered }
+.hatYonetimi.part .content .liste .tezgah.item .miktarVeGSC > div { width: var(--full) !important }
+.hatYonetimi.part .content .liste .tezgah.item .miktarVeGSC > * > * { width: max-content !important }
+.hatYonetimi.part .content .liste .tezgah.item .miktarVeGSC > *> *:not(:last-child) { }
+.hatYonetimi.part .content .liste .tezgah.item .miktarVeGSC th, .hatYonetimi.part .content .liste .tezgah.item .miktarVeGSC { margin-top: 8px }
+.hatYonetimi.part .content .liste .tezgah.item .miktarVeGSC th, .hatYonetimi.part .content .liste .tezgah.item .miktarVeGSC td { text-align: right; padding: 0 5px; border: 1px dotted #ddd }
+.hatYonetimi.part .content .liste .tezgah.item .miktarVeGSC tr > * { font-weight: bold }
+.hatYonetimi.part .content .liste .tezgah.item .miktarVeGSC th { color: #333 }
+.hatYonetimi.part .content .liste .tezgah.item .miktarVeGSC td { color: royalblue }
+.hatYonetimi.part .content .liste .tezgah.item .miktarVeGSC td.net { font-size: 120%; font-weight: bold; color: forestgreen }
+.hatYonetimi.part .content .liste .tezgah.item .aktifIsSayi-parent { font-size: 120%; color: #333; position: absolute; right: 20px /* text-align: right; position: absolute; top: 20px; right: 13px; margin-left: 5px*/ }
+.hatYonetimi.part .content .liste .tezgah.item .aktifIsSayi { font-weight: bold; color: orangered !important }
+.hatYonetimi.part .content .liste .tezgah.item .grafik-parent { position: absolute; margin-top: -3px; right: 10px; opacity: .5; height: 50px !important; overflow-y: clip }
+.hatYonetimi.part .content .liste .tezgah.item .grafik-parent > * { }
+.hatYonetimi.part .content .liste .tezgah.item .butonlar.part > .sag > button:nth-last-child(2) { margin-left: unset }
+.hatYonetimi.part .content .liste .tezgah.item .ust { position: relative; height: calc(var(--full) - (var(--alt-height) + var(--padding-y))); overflow-y: auto }
+.hatYonetimi.part .content .liste .tezgah.item .alt {
+	--sag-width: 90px; font-size: 230%; font-weight: bold; color: #ddd; background-color: #222;
+	position: relative; width: var(--full); height: var(--alt-height); bottom: -2px !important
+}
+body.dark-theme .hatYonetimi.part .content .liste .tezgah.item .alt { filter: invert(1) hue-rotate(180deg) }
+.hatYonetimi.part .content .liste .tezgah.item .alt .sol { width: calc(var(--full) - var(--sag-width)) !important }
+.hatYonetimi.part .content .liste .tezgah.item .alt .sag { width: var(--sag-width) !important }
+.hatYonetimi.part .content .liste .tezgah.item .alt button { font-size: 50% !important }
+.hatYonetimi.part .content .liste .tezgah.item.jqx-grid-cell-selected .alt { filter: contrast(.8) }
+.hatYonetimi.part .content .liste .tezgah.item .alt .sol { position: relative; top: 6px; left: 3px; color: unset }
+.hatYonetimi.part .content .liste .tezgah.item .alt .nedenText { font-size: 50%; top: -3px; left: 0px; color: #eca !important }
+[data-durum = 'DV'] { color: lightgreen !important; box-shadow: 3px 3px 8px 5px lightgreen }
+[data-durum = 'DR'] { color: #dec8bf !important; box-shadow: 5px 5px 8px 5px #ed8562 }
+[data-durum = 'AT'] { color: #978ae6 !important; box-shadow: 8px 8px 13px 8px #978ae6 }
+[data-durum = 'BK'] { color: #bbb !important; box-shadow: 8px 8px 13px 10px #8d8d8d }
+[role = row] *:has([data-durum = 'DV'].sinyal-kritik), [role = row] *:has([data-durum = 'DR'].sinyal-kritik) { box-shadow: 1px 1px 5px 1px #7aa964 }
+[data-durum = 'DV'].sinyal-kritik, [data-durum = 'DR'].sinyal-kritik, .sinyal-kritik [data-durum = 'DV'], .sinyal-kritik [data-durum = 'DR'] {
+	color: whitesmoke !important; box-shadow: 5px 5px 8px 10px #1e8e1e; animation: 1300ms cubic-bezier(0.1, 0, 1, 1) 0ms infinite normal sinyal-kritik-bg }
+[role = row] *has:([data-durum = 'DR'].kritik-durNeden), .kritik-durNeden { box-shadow: 1px 1px 5px 1px #ad342d }
+[data-durum = 'DR'].kritik-durNeden, .kritik-durNeden [data-durum = 'DR'] { color: #cd857f !important; box-shadow: 5px 5px 5px 8px #ba524b }
+[role = row] *:has([data-durum = 'DR'].duraksama-kritik) { box-shadow: 1px 1px 5px 1px #ad3d3d }
+[data-durum = 'DR'].duraksama-kritik, .duraksama-kritik [data-durum = 'DR'] {
+	color: #f16767 !important; box-shadow: 8px 8px 13px 8px #d9b39b; animation: 2000ms cubic-bezier(0.1, 0, 1, 1) 0ms infinite normal duraksama-kritik-bg }
+@keyframes sinyal-kritik-bg { 50% { background-color: #24400f } }
+@keyframes duraksama-kritik-bg { 50% { background-color: #853021 } }
+@keyframes ekBilgi-bg { 50% { background-color: #712e0e } }
+
+.ozetBilgi.jqx-window .jqx-window-content { background: linear-gradient(90deg, #1a1a1a 5%, #222 80%) !important }
+body.dark-theme .ozetBilgi.jqx-window .jqx-window-content { filter: invert(1) hue-rotate(180deg) }
+body.dark-theme .ekBilgi.jqx-window { filter: invert(1) hue-rotate(180deg) }
+.ozetBilgi.jqx-window .subContent .ozetBilgi-parent { width: var(--full); height: var(--full); font-size: 100% }
+.ozetBilgi.jqx-window .subContent .ozetBilgi-container { position: relative; display: flex; flex-wrap: wrap; left: -40px; top: 10px; line-height: 28px }
+.ozetBilgi.jqx-window .subContent .ozetBilgi-container li, .ozetBilgi.jqx-window .subContent .ozetBilgi-container .ek-satirlar li { font-size: 120%; color: #333; list-style: none; min-width: 300px; border-radius: 10px; margin-left: 20px; padding: 3px 0 }
+.ozetBilgi.jqx-window .subContent .ozetBilgi-container .ek-satirlar li { line-height: 180% }
+.ozetBilgi.jqx-window .subContent .ozetBilgi-container li .sub-item:not(.baslik):not(:last-child) { margin-right: 8px }
+.ozetBilgi.jqx-window .subContent .ozetBilgi-container li .etiket { font-weight: bold; color: #cce; margin-right: 5px }
+.ozetBilgi.jqx-window .subContent .ozetBilgi-container li .etiket.highlight { color: #eee }
+.ozetBilgi.jqx-window .subContent .ozetBilgi-container li .durum, .ozetBilgi.jqx-window .subContent .ozetBilgi-container li .sayi { font-weight: bold; width: 80px; text-align: right }
+.ozetBilgi.jqx-window .subContent .ozetBilgi-container li .durum { } .ozetBilgi.jqx-window .subContent .ozetBilgi-container li .sayi { color: #84bfe1 }
+.ozetBilgi.jqx-window .subContent .ozetBilgi-container li .durum { } .ozetBilgi.jqx-window .subContent .ozetBilgi-container li .on > * { color: lightgreen }
+.ozetBilgi.jqx-window .subContent .ozetBilgi-container li .durum { } .ozetBilgi.jqx-window .subContent .ozetBilgi-container li .pasif > * { color: orange }
+.ozetBilgi.jqx-window .subContent .ozetBilgi-container li .durum { } .ozetBilgi.jqx-window .subContent .ozetBilgi-container li .off > * { color: indianred }
+#ledDegistir.jqx-window .jqx-window-content { overflow-y: hidden !important }

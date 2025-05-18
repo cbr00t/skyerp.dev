@@ -1,0 +1,4 @@
+.uiTarih { text-align: center }
+.uiTarih::placeholder { font-size: 80% }
+.uiTarih.date { width: 150px }
+.uiTarih.time { width: 100px }
