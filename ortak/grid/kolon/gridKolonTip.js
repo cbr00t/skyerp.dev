@@ -13,6 +13,22 @@ class GridKolonTip extends CObject {
 		})*/
 	}
 	get createEditor() { return null } get initEditor() { return null } get getEditorValue() { return null }
+	get initEditor() {
+		return ((colDef, rowIndex, value, editor, cellText, pressedChar) => {
+			const isCustomEditor = (colDef.columnType == 'custom' || colDef.columnType == 'template'), {maxLength} = this;
+			const _editor = editor.children('.editor'); editor = _editor.length ? _editor : editor;
+			if (maxLength && isCustomEditor) { editor.prop('maxlength', maxLength) }
+			if (_editor?.length && _editor.select) setTimeout(() => { editor.focus(); editor.select() }, 50)
+		})
+	}
+	get validation() {
+		return ((colDef, info, value) => {
+			const {maxLength} = this;
+			if (maxLength != null && value != null && (typeof value == 'string' || typeof value == 'number') && value.toString().length > maxLength)
+				return ({ result: false, message: `Değer <b>${maxLength}</b> karakterden fazla olamaz` })
+			return true
+		})
+	}
 	
 	constructor(e) { super(e); e = e || {}; this.readFrom(e) }
 	static getClass(e) { e = e || {}; const tip = typeof e == 'object' ? e.tip : e; return this._tip2Sinif[tip] || this; }
@@ -30,6 +46,18 @@ class GridKolonTip extends CObject {
 		this.kodGosterilmesinmi = e.kodGosterilmesin ?? e.kodGosterilmesinmi ?? e.kodsuzmu ?? e.kodsuz;
 		this.listedenSecilemezFlag = e.listedenSecilemez ?? e.listedenSecilemezmi ?? e.listedenSecilemezFlag;
 		return true
+	}
+	/* return true: override grid default handler,  return (true / false) = event handled */
+	handleKeyboardNavigation_ortak(e) {
+		let {keyState: state} = e, {gridPart, editing, modifiers, keyLower: key} = state;
+		switch (key) {
+			case 'enter': case 'tab': {
+				let preventGridEvents = !editing;
+				if (!editing) { gridPart.endCellEdit(true) }
+				gridPart.selectEditableCell({ ...e, prev: !!modifiers.shift });
+				return preventGridEvents
+			}
+		}
 	}
 	static getHTML_groupsTotalRow(value) {
 		if (typeof value == 'number') { value = numberToString(value) }
@@ -49,22 +77,6 @@ class GridKolonTip extends CObject {
 		if (jqxFilterCondition) { column.filterCondition = jqxFilterCondition }
 		if (jqxCellsFormat !== undefined && !(jqxColumnType == 'template' || jqxColumnType == 'custom')) { column.cellsFormat = jqxCellsFormat }
 		if (isEditable != null) { column.editable = isEditable }
-	}
-	get initEditor() {
-		return ((colDef, rowIndex, value, editor, cellText, pressedChar) => {
-			const isCustomEditor = (colDef.columnType == 'custom' || colDef.columnType == 'template'), {maxLength} = this;
-			const _editor = editor.children('.editor'); editor = _editor.length ? _editor : editor;
-			if (maxLength && isCustomEditor) { editor.prop('maxlength', maxLength) }
-			if (_editor?.length && _editor.select) setTimeout(() => { editor.focus(); editor.select() }, 50)
-		})
-	}
-	get validation() {
-		return ((colDef, info, value) => {
-			const {maxLength} = this;
-			if (maxLength != null && value != null && (typeof value == 'string' || typeof value == 'number') && value.toString().length > maxLength)
-				return ({ result: false, message: `Değer <b>${maxLength}</b> karakterden fazla olamaz` })
-			return true
-		})
 	}
 	setMaxLength(value) { this.maxLength = value; return this } kodsuz() { return this.kodGosterilmesin() }
 	kodGosterilmesin() { this.kodGosterilmesinmi = true; return this } kodGosterilsin() { this.kodGosterilmesinmi = false; return this }

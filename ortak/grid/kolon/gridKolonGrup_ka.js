@@ -213,15 +213,15 @@ class GridKolonGrup_KA extends GridKolonGrup {
 			}
 			if (!kaKolonu.cellClick) {
 				kaKolonu.cellClick = e => {
-					const {args} = e, isRightClick = args?.rightclick;
+					let {args} = e, isRightClick = args?.rightclick;
 					if (isRightClick) {
 						if (kaKolonu._event_cellClick) { return } clearTimeout(() => kaKolonu._event_cellClick);
 						kaKolonu._event_cellClick = setTimeout(() => { try { kaKolonu.listedenSec(e) } finally { delete kaKolonu._event_cellClick } }, 50)
 					}
-					else {
+					/*else {    -- oto edit'e geçmesin
 						const {gridWidget, belirtec, rowIndex} = e;
 						if (gridWidget && !gridWidget.editcell) {
-							/*clearTimeout(this._timer_kaKolonu_cellClick);*/ if (this._timer_kaKolonu_cellClick) { return }
+							if (this._timer_kaKolonu_cellClick) { return }
 							this._timer_kaKolonu_cellClick = setTimeout(() => {
 								try { 
 									const curCell = gridWidget.getselectedcell();
@@ -230,7 +230,7 @@ class GridKolonGrup_KA extends GridKolonGrup {
 								finally { delete this._timer_kaKolonu_cellClick }
 							}, 1000)
 						}
-					}
+					}*/
 				}
 			}
 			/*if (!kaKolonu.cellsRenderer) {
@@ -260,6 +260,10 @@ class GridKolonGrup_KA extends GridKolonGrup {
 				catch (ex) { console.error(ex); const errorText = getErrorText(ex); hConfirm(`<div class="bold firebrick" style="padding: 13px 8px;">${errorText}</div>`, 'Grid AutoComplete Verisi Alınamadı') }
 			}
 		})
+	}
+	handleKeyboardNavigation_ortak(e) {
+		let result = super.handleKeyboardNavigation_ortak(e); if (result != null) { return result }
+		return this.kaKolonu?.handleKeyboardNavigation_ortak?.(e)
 	}
 	get attributes() { return this.kaKolonu.attributes }
 	get sabitmi() { return this.kaKolonu.sabitmi } get isEditable() { return this.kaKolonu.isEditable } set isEditable(value) { this.kaKolonu.isEditable = value }

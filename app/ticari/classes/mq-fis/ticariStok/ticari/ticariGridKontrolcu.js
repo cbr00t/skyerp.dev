@@ -12,7 +12,7 @@ class TicariGridKontrolcu extends TSGridKontrolcu {
 					let {sh: colDef} = this.parentPart.belirtec2Kolon;
 					rec.shKod = rec.shAdi = null; gridWidget.updaterow(uid, rec)
 				}
-			}).noSql().alignCenter().sabitle().tipTekSecim({ tekSecimSinif: MQSHTipVeAciklama, kodGosterilmesin: true })
+			}).noSql().kodsuz().alignCenter().sabitle().tipTekSecim({ tekSecimSinif: MQSHTipVeAciklama, kodGosterilmesin: true })
 		);
 		super.tabloKolonlariDuzenle(e); let {fis} = this; tabloKolonlari = e.tabloKolonlari;
 		let shColDef = tabloKolonlari.find(colDef => colDef.belirtec == 'sh'), {kaKolonu} = shColDef;

@@ -25,7 +25,7 @@ class GridKolon extends GridKolonVeGrupOrtak {
 			if (typeof tipOrDef == 'object') { tip = $.isPlainObject(tipOrDef) ? GridKolonTip.from(tipOrDef) : tipOrDef }
 			else if (typeof tipOrDef == 'string') { tip = GridKolonTip.from($.extend({}, e, { tip: tipOrDef })) }
 		}
-		if (!tip) { tip = new GridKolonTip_String(); this.tip = tip }
+		if (!tip) { tip = this.tip = new GridKolonTip_String() }
 		if (maxLength) { tip.maxLength = maxLength }
 		const savedCellValueChanging = this.cellValueChanging; this.cellValueChanging = (colDef, rowIndex, dataField, columnType, oldValue, newValue) => {
 			if (colDef && !colDef.isEditable) { return oldValue }
@@ -65,6 +65,10 @@ class GridKolon extends GridKolonVeGrupOrtak {
 		}
 		let align = this.align = e.align || e.align || null; if (tip && !align) { const {defaultAlign} = tip.class; if (defaultAlign) { align = this.align = defaultAlign } }
 		return true
+	}
+	handleKeyboardNavigation_ortak(e) {
+		let result = super.handleKeyboardNavigation_ortak(e); if (result != null) { return result }
+		return this.tip?.handleKeyboardNavigation_ortak(e)
 	}
 	setAttributes(e) {
 		e = e || {}; const attributes = this.attributes = {

@@ -1,14 +1,14 @@
 <?php
 	header('Content-Type: application/json');
-	require_once('config.php');
-	/* "display_override": ["fullscreen", "standalone", "window-controls-overlay"], */
+	require_once('config.php')
+	/* "display_override": ["fullscreen", "standalone", "window-controls-overlay"] */
 ?>
 {
 	"manifest_version": 3, "offline_enabled": true, "id": "<?=$appClass?>", "version": "<?=$appVersion?>",
 	"short_name": "<?=$appName?>", "name": "<?=$appName?>", "description": "<?=$appName?> Uygulaması",
 	"categories": ["business"], "display": "fullscreen", "display_override": ["fullscreen", "standalone"],
 	"launch_handler": { "client_mode": ["focus-existing", "auto"] },
-	"scope": "/skyerp.dev", "start_url": "/skyerp<?=$startURL_postfix?>/", "orientation": "any",
+	"scope": "/skyerp.dev", "start_url": "/skyerp.dev<?=$startURL_postfix?>/", "orientation": "any",
 	"scope_extensions": ["*"],
 	"prefer_related_applications": false, "related_applications": [],
 	"background_color": "#3367D6", "theme_color": "#3367D6", "lang": "tr", "dir": "ltr",
