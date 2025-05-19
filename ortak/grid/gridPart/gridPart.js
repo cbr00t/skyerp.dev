@@ -12,6 +12,7 @@ class GridPart extends Part {
 	get recs() { const {gridWidget} = this; return gridWidget ? gridWidget.getrows() : null }
 	get dataView() { return this.gridWidget?.dataview }
 	get totalRecs() { return this.dataView?.totalrecords ?? this.boundRecs?.length }
+	get totalCols() { return this.gridWidget.columns.records.length }
 	get selectedRowIndexes() {
 		const {gridWidget} = this; if (!gridWidget) return []; const sel = gridWidget.getselection();
 		let result = ($.isEmptyObject(sel.rows) ? Object.keys(asSet(sel.cells.map(cell => cell.rowindex))).map(x => asInteger(x)) : (sel.rows || []).filter(x => x != null));
@@ -37,6 +38,7 @@ class GridPart extends Part {
 		}
 		return result
 	}
+	get selectedColIndex() { return this.gridWidget.getcolumnindex(this.selectedBelirtec) }
 	get editCell() { return this.gridWidget.editcell } get editing() { return !!this.editCell?.datafield }
 	get isEditable() { const {gridWidget} = this; return gridWidget ? gridWidget.editable : null }
 	get selectionMode() { const {gridWidget} = this; return gridWidget?.selectionmode }
@@ -161,11 +163,11 @@ class GridPart extends Part {
 		grid.on('bindingcomplete', event => this.gridVeriYuklendi({ ...e, sender: this, builder, event, grid, gridWidget, source: gridWidget.source }));
 		grid.on('groupschanged', event => this.gridGroupsChanged({ ...e, sender: this, builder, event, grid, gridWidget, source: gridWidget.source }));
 		grid.on('cellvaluechanged', evt => {
-			setTimeout(() =>
-				this.gridVeriDegisti($.extend({}, e, {
-					sender: this, builder, event: evt, grid, gridWidget, belirtec: evt.args.datafield,
-					action: 'cellValueChanged', rowIndex: evt.args.rowindex, newValue: evt.args.newvalue, oldValue: evt.args.oldvalue
-				})), 10)
+			let _e = {
+				...e, sender: this, builder, event: evt, grid, gridWidget, belirtec: evt.args.datafield,
+				action: 'cellValueChanged', rowIndex: evt.args.rowindex, newValue: evt.args.newvalue, oldValue: evt.args.oldvalue
+			};
+			setTimeout(() => this.gridVeriDegisti(_e), 10)
 		});
 		grid.on('contextmenu', evt => { setTimeout(() => this.gridContextMenuIstendi({ sender: this, builder: this.builder, event: evt }), 10); evt.preventDefault() });
 		grid.on('sort', evt => { setTimeout(() => this.gridSortIstendi({ sender: this, builder: this.builder, event: evt }), 10) });
@@ -220,12 +222,12 @@ class GridPart extends Part {
 		const liste = []; if (!this.rowNumberOlmasinFlag) {
 			liste.push(new GridKolon({
 					belirtec: '_rowNumber', text: '#', width: 55, groupable: false, filterable: false, draggable: false, exportable: false,
-					filterType: 'input', cellClassName: '_rowNumber grid-readOnly'
-					/*cellsRenderer: (colDef, rowIndex, columnField, value, html, jqxCol, rec) => {
+					filterType: 'input', cellClassName: '_rowNumber grid-readOnly',
+					cellsRenderer: (colDef, rowIndex, columnField, value, html, jqxCol, rec) => {
 						if (rec) { rec._rowNumber = rowIndex + 1 }
 						value = (rec?.boundIndex ?? rowIndex) + 1; html = changeTagContent(html, value.toString())
 						return html
-					}*/
+					}
 			}).tipNumerik().noSql().readOnly().sabitle())
 		}
 		return liste
@@ -472,15 +474,16 @@ class GridPart extends Part {
 						}
 							
 						else if (keyLower == 'delete') {
-							const _selection = gridWidget.getselection(); let selectedRowIndexes = _selection.rows;
+							let _selection = gridWidget.getselection(); let selectedRowIndexes = _selection.rows;
 							if ($.isEmptyObject(selectedRowIndexes)) selectedRowIndexes = _selection.cells.map(cell => cell.rowindex);
-							const selectedUids = $.isEmptyObject(selectedRowIndexes) ? null : selectedRowIndexes.map(rowIndex => gridWidget.getrowid(rowIndex));
+							let selectedUids = $.isEmptyObject(selectedRowIndexes) ? null : selectedRowIndexes.map(rowIndex => gridWidget.getrowid(rowIndex));
 							if (modifiers.ctrl && !this.sabitFlag) {
 								if (selectedUids) {
 									gridWidget.deleterow(selectedUids);
-									const targetRowIndex = Math.max(rowIndex + 1 >= totalRecs ? rowIndex - 1 : rowIndex, 0); gridWidget.clearselection();
-									if (this.isSelectionMode_cells) gridWidget.selectcell(targetRowIndex, belirtec)
-									else gridWidget.selectrow(targetRowIndex);
+									let targetRowIndex = Math.max(rowIndex + 1 >= totalRecs ? rowIndex - 1 : rowIndex, 0);
+									gridWidget.clearselection();
+									if (this.isSelectionMode_cells) { gridWidget.selectcell(targetRowIndex, belirtec) }
+									else { gridWidget.selectrow(targetRowIndex) }
 									setTimeout(() => {
 										this.gridSatirSilindi({
 											sender, builder, owner: gridWidget, rowIndexes: selectedRowIndexes, uids: selectedUids,
@@ -595,8 +598,13 @@ class GridPart extends Part {
 		this.gridGroupsChanged(e); if ($.isEmptyObject(expandedIndexes)) { for (const delayMS of [100]) { setTimeout(() => this.onResize(), delayMS) } }
 	}
 	gridVeriDegisti(e) {
-		const {gridVeriDegistiBlock} = this; if (gridVeriDegistiBlock) { getFuncValue.call(this, gridVeriDegistiBlock, e) }
-		const kontrolcu = this.getKontrolcu(e); if (kontrolcu?.gridVeriDegisti) { kontrolcu.gridVeriDegisti(e) }
+		this.gridVeriDegistiBlock?.call(this, e); this.getKontrolcu(e)?.gridVeriDegisti?.(e);
+		let gridWidget = e.event?.args.owner ?? this.gridWidget, {rowIndex, belirtec} = e;
+		if (rowIndex != null && belirtec) {
+			let cell = gridWidget.getselectedcell();
+			let rec = gridWidget.getrowdata(cell?.rowindex);
+			if (rec) { setTimeout(() => gridWidget.updaterow(rec.uid, rec), 0) }
+		}
 	}
 	gridGroupsChanged(e) {
 		const {gridGroupsChangedBlock} = this; if (gridGroupsChangedBlock) { const result = getFuncValue.call(this, gridGroupsChangedBlock, e); if (result === false) { return } }
@@ -734,22 +742,21 @@ class GridPart extends Part {
 			</script>`);
 		doc.writeln(`</head><body>${data}<script>loaded()</script></body></html>`);
 	}
-	gridSortIstendi(e) { const kontrolcu = this.getKontrolcu(e); if (kontrolcu?.gridSortIstendi) kontrolcu.gridSortIstendi(e) }
-	gridRowExpanded(e) { const kontrolcu = this.getKontrolcu(e); if (kontrolcu?.gridRowExpanded) kontrolcu.gridRowExpanded(e) }
-	gridRowCollapsed(e) { const kontrolcu = this.getKontrolcu(e); if (kontrolcu?.gridRowCollapsed) kontrolcu.gridRowCollapsed(e) }
+	gridSortIstendi(e) { this.getKontrolcu(e)?.gridSortIstendi?.(e) }
+	gridRowExpanded(e) { this.getKontrolcu(e)?.gridRowExpanded?.(e) }
+	gridRowCollapsed(e) { this.getKontrolcu(e)?.gridRowCollapsed?.(e) }
 	gridGroupExpanded(e) {
-		const kontrolcu = this.getKontrolcu(e); if (kontrolcu?.gridGroupExpanded) { kontrolcu.gridGroupExpanded(e) }
-		const type = 'groupExpanded', {event} = e, gridPart = this, {inst, builder} = gridPart, mfSinif = gridPart.mfSinif ?? inst?.class; clearTimeout(this._timer_rendered);
-		this._timer_rendered = setTimeout(() => this.gridRendered({ type, builder, event, gridPart, mfSinif, inst, kontrolcu }), gridPart.renderDelayMS ?? mfSinif?.orjBaslik_gridRenderDelayMS ?? 300);
+		this.getKontrolcu(e)?.gridGroupExpanded?.(e);
+		let type = 'groupExpanded', {event} = e, gridPart = this, {inst, builder} = gridPart, mfSinif = gridPart.mfSinif ?? inst?.class;
+		clearTimeout(this._timer_rendered);
+		this._timer_rendered = setTimeout(() =>
+			this.gridRendered({ type, builder, event, gridPart, mfSinif, inst, kontrolcu }),
+			gridPart.renderDelayMS ?? mfSinif?.orjBaslik_gridRenderDelayMS ?? 300)
 	}
-	gridGroupCollapsed(e) { const kontrolcu = this.getKontrolcu(e); if (kontrolcu?.gridGroupCollapsed) { kontrolcu.gridGroupCollapsed(e) } }
+	gridGroupCollapsed(e) { this.getKontrolcu(e)?.gridGroupCollapsed?.(e) }
 	gridCellBeginEdit(e) {
 		let {gridKeyState: state, gridWidget} = this, result; try {
-			/* if (state?.result === false) { result = false } */
-			if (result) {
-				let kontrolcu = this.getKontrolcu(e); result = kontrolcu?.gridCellBeginEdit?.(e) ?? true;
-				/* if (state?.result === false) { result = false } */
-			}
+			result = this.getKontrolcu(e)?.gridCellBeginEdit?.(e) ?? true;
 			if (result === false) { e.event?.preventDefault(); gridWidget.endcelledit() }
 		}
 		finally { state?.resetResult() }
@@ -757,56 +764,80 @@ class GridPart extends Part {
 	}
 	gridCellEndEdit(e) {
 		let {gridKeyState: state, gridWidget} = this, result; try {
-			/* if (state?.result === false) { result = false } */
-			if (result) {
-				let kontrolcu = this.getKontrolcu(e); result = kontrolcu?.gridCellEndEdit?.(e) ?? true;
-				/* if (state?.result === false) { result = false } */
-			}
+			result = this.getKontrolcu(e)?.gridCellEndEdit?.(e) ?? true;
 			if (result === false) { e.event?.preventDefault() }
 		}
 		finally { state?.resetResult() }
 		return result
 	}
-	gridSatirEklendi(e) { this.gridSatirSayisiDegisti(e); const kontrolcu = this.getKontrolcu(e); if (kontrolcu?.gridSatirEklendi) kontrolcu.gridSatirEklendi(e) }
-	gridSatirGuncellendi(e) { const kontrolcu = this.getKontrolcu(e); if (kontrolcu?.gridSatirEklendi) { kontrolcu.gridSatirGuncellendi(e) } }
-	gridSatirSilindi(e) { this.gridSatirSayisiDegisti(e); const kontrolcu = this.getKontrolcu(e); if (kontrolcu?.gridSatirSilindi) { kontrolcu.gridSatirSilindi(e) } }
-	gridSatirSayisiDegisti(e) { const kontrolcu = this.getKontrolcu(e); if (kontrolcu?.gridSatirSayisiDegisti) { kontrolcu.gridSatirSayisiDegisti(e) } }
+	gridSatirEklendi(e) {
+		this.gridSatirSayisiDegisti(e); this.getKontrolcu(e)?.gridSatirEklendi?.(e);
+		return this.signalColumnEvents('satirEklendi', null, e)
+	}
+	gridSatirGuncellendi(e) {
+		this.getKontrolcu(e)?.gridSatirGuncellendi?.(e);
+		return this.signalColumnEvents('satirGuncellendi', null, e)
+	}
+	gridSatirSilinecek(e) {
+		let result = this.getKontrolcu(e)?.gridSatirSilinecek?.(e);
+		return this.signalColumnEvents('satirSilinecek', null, e) ?? result
+	}
+	gridSatirSilindi(e) {
+		this.gridSatirSayisiDegisti(e); this.getKontrolcu(e)?.gridSatirSilindi?.(e);
+		this.signalColumnEvents('satirSilindi', null, e)
+	}
+	gridSatirSayisiDegisti(e) {
+		this.getKontrolcu(e)?.gridSatirSayisiDegisti?.(e);
+		this.signalColumnEvents('satirSayisiDegisti', null, e)
+	}
 	gridSatirTiklandi(e) {
-		e = e || {}; const {gridWidget, isClickedColumn_checkBox, isClickedColumn_rowNumber} = this, {type} = e, evt = e.event || {}, {args} = evt, belirtec = args.datafield ?? this.clickedColumn;
+		e = e || {}; let {gridWidget, isClickedColumn_checkBox, isClickedColumn_rowNumber} = this, {type} = e;
+		let evt = e.event || {}, {args} = evt, belirtec = args.datafield ?? this.clickedColumn;
 		let rowIndex = args.rowindex; if (rowIndex == null || rowIndex < 0) { rowIndex = gridWidget.selectedrowindex }
 		if (type == 'row') {
 			if (isClickedColumn_rowNumber && this.isSelectionMode_cells) {
 				gridWidget.beginupdate(); gridWidget.selectionmode = 'multiplerowsextended';
-				gridWidget.clearselection(); gridWidget.selectrow(rowIndex); gridWidget.endupdate(true); this.selectionModeChangedFlag = true
+				gridWidget.clearselection(); gridWidget.selectrow(rowIndex); gridWidget.endupdate(true);
+				this.selectionModeChangedFlag = true
 			}
 			else {
 				if (!isClickedColumn_rowNumber && this.selectionModeChangedFlag) {
-					gridWidget.selectionmode = this.orjSelectionMode; delete this.selectionModeChangedFlag;
-					gridWidget.clearselection(); if (this.isSelectionMode_cells) { gridWidget.selectcell(rowIndex, belirtec) } else gridWidget.selectrow(rowIndex)
+					gridWidget.selectionmode = this.orjSelectionMode;
+					delete this.selectionModeChangedFlag; gridWidget.clearselection();
+					if (this.isSelectionMode_cells) { gridWidget.selectcell(rowIndex, belirtec) }
+					else gridWidget.selectrow(rowIndex)
 				}
 				if (this.isSelectionMode_checkBox) {
 					if (!args.rightclick) { setTimeout(() => {
 						if (this.disableClickEventsFlag) { return }
-						if (rowIndex != null && rowIndex > -1) { if (!isClickedColumn_checkBox) { gridWidget.clearselection() } gridWidget.selectrow(rowIndex) }
+						if (rowIndex != null && rowIndex > -1) {
+							if (!isClickedColumn_checkBox) { gridWidget.clearselection() }
+							gridWidget.selectrow(rowIndex)
+						}
 					}, 50) }
 				}
 			}
 		}
-		const gridPart = this, {inst} = gridPart, mfSinif = gridPart.mfSinif ?? inst?.class; clearTimeout(this._timer_rendered);
-		const colDef = gridPart.belirtec2Kolon[belirtec], rec = gridWidget.getrowdata(rowIndex), delayMS = (gridPart.renderDelayMS ?? mfSinif?.orjBaslik_gridRenderDelayMS ?? MQCogul.defaultOrjBaslik_gridRenderDelayMS) / 2;
+		let gridPart = this, {inst} = gridPart, mfSinif = gridPart.mfSinif ?? inst?.class; clearTimeout(this._timer_rendered);
+		let colDef = gridPart.belirtec2Kolon[belirtec], rec = gridWidget.getrowdata(rowIndex);
+		let delayMS = (gridPart.renderDelayMS ?? mfSinif?.orjBaslik_gridRenderDelayMS ?? MQCogul.defaultOrjBaslik_gridRenderDelayMS) / 2;
 		this._timer_rendered = setTimeout(() => gridPart.gridRendered({ type, gridPart, mfSinif, inst, colDef, rec, rowIndex, belirtec }), delayMS);
-		const {gridSatirTiklandiBlock} = this; if (gridSatirTiklandiBlock) { const result = getFuncValue.call(this, gridSatirTiklandiBlock, e); if (result === false) return }
-		const kontrolcu = this.getKontrolcu(e); return kontrolcu?.gridSatirTiklandi ? (kontrolcu.gridSatirTiklandi(e) ?? true) : true
+		if (this.gridSatirTiklandiBlock?.(e) === false) { return false }
+		let result = this.getKontrolcu(e)?.gridSatirTiklandi?.(e);
+		result = this.signalColumnEvents('gridSatirTiklandi', e, e) ?? result;
+		return result ?? true
 	}
 	gridSatirCiftTiklandi(e) {
-		const {gridWidget, isClickedColumn_checkBox, gridSatirCiftTiklandiBlock} = this;
+		const {gridWidget, isClickedColumn_checkBox} = this;
 		if (isClickedColumn_checkBox) {
 			const selRows = gridWidget?.selectedrowindexes; setTimeout(selRows => {
 				if (gridWidget && gridWidget.selectedrowindexes != selRows) { gridWidget.beginupdate(); gridWidget.selectedrowindexes = selRows; gridWidget.endupdate(true) }
 			}, 10, selRows); return false
 		}
-		if (gridSatirCiftTiklandiBlock) { const result = getFuncValue.call(this, gridSatirCiftTiklandiBlock, e); if (result === false) return }
-		const kontrolcu = this.getKontrolcu(e); return kontrolcu?.gridSatirCiftTiklandi ? (kontrolcu.gridSatirCiftTiklandi(e) ?? true) : true
+		if (this.gridSatirCiftTiklandiBlock?.(e) === false) { return false }
+		let result = this.getKontrolcu(e)?.gridSatirCiftTiklandi?.(e);
+		result = this.signalColumnEvents('gridSatirCiftTiklandi', e, e) ?? result;
+		return result ?? true
 	}
 	gridHucreTiklandi(e) {
 		e = e || {}; const {gridWidget} = this, {type} = e, evt = e.event || {}, {args} = evt, belirtec = args.datafield ?? this.clickedColumn;
@@ -872,27 +903,27 @@ class GridPart extends Part {
 		filtreBilgi.degistimi = false*/
 	}
 	endCellEdit(e) {
-		let commitFlag = typeof e == 'object' ? e.commit : e;
+		let commit = typeof e == 'object' ? e.commit : e, rollback = commit == null ? null : !commit;
 		let {editing, editCell, grid, gridWidget} = this, {datafield: belirtec, row: rowIndex} = editCell ?? {};
 		if (editing) {
-			gridWidget.endcelledit(rowIndex, belirtec, commitFlag ?? true)
+			gridWidget.endcelledit(rowIndex, belirtec, rollback ?? false)
 		}
 		else {
 			let {_last_beginEditHandler: beginEditHandler} = this; if (!beginEditHandler) {
 				beginEditHandler = this._last_beginEditHandler = evt => {
 					grid.off('cellbeginedit', beginEditHandler); delete this._last_beginEditHandler;
 					let {editCell} = this, {datafield: belirtec, row: rowIndex} = editCell ?? {};
-					setTimeout(() => gridWidget.endcelledit(rowIndex, belirtec, commitFlag ?? true), 0)
+					setTimeout(() => gridWidget.endcelledit(rowIndex, belirtec, rollback ?? false), 0)
 					
 				};
 				grid.on('cellbeginedit', beginEditHandler);
-				setTimeout(() => { delete this._last_beginEditHandler; grid.off('cellbeginedit', beginEditHandler) }, 5)  /* önlem - event eklenmiş kalmasın */
+				setTimeout(() => { delete this._last_beginEditHandler; grid.off('cellbeginedit', beginEditHandler) }, 2)    /* önlem - event eklenmiş kalmasın */
 			}
 		}
 		return this
 	}
 	selectEditableCell(e) {
-		let prevFlag = typeof e == 'object' ? e.prev : e;
+		e = e ?? {}; let {prev, before} = e;
 		if (!this.isSelectionMode_cells) { return this }
 		let {gridWidget, selectedBelirtec: belirtec, selectedRowIndex: rowIndex, duzKolonTanimlari: colDefs} = this;
 		colDefs = colDefs.filter(colDef => colDef.isEditable && gridWidget.iscolumnvisible(colDef.belirtec));
@@ -904,19 +935,19 @@ class GridPart extends Part {
 			gridWidget.clearselection(); gridWidget.selectcell(rowIndex, belirtec);
 			return true
 		};
-		if (!(!prevFlag && ctrl) && (prevFlag ? colInd : colInd + 1 < colDefs.length)) {
+		if (!(!prev && ctrl) && (prev ? colInd : colInd + 1 < colDefs.length)) {
 			/* kolon snırda DEĞİL, kolonlar arası geçiş */
-			let {belirtec: newBelirtec} = colDefs[prevFlag ? colInd - 1 : colInd + 1] ?? {};
+			let {belirtec: newBelirtec} = colDefs[prev ? colInd - 1 : colInd + 1] ?? {};
 			if (selectCell(rowIndex, newBelirtec)) { return this }
 		}
 		/* kolon sınırda veya sınır aşıldı, satırlar arası geçiş */
 		let {totalRecs: count, sabitFlag} = this;
-		let newRowIndex = prevFlag ? rowIndex - 1 : rowIndex + 1; if (newRowIndex < 0) { return this }
-		if ((!prevFlag && ctrl) || newRowIndex >= count) {
+		let newRowIndex = prev ? rowIndex - 1 : rowIndex + 1; if (newRowIndex < 0) { return this }
+		if ((!prev && ctrl) || newRowIndex >= count) {
 			if (sabitFlag) { return this }
-			this.addNewRec({ offset: newRowIndex - 1 })
+			this.addRow({ offset: before ? newRowIndex - 1 : newRowIndex })
 		}
-		let tersColInd = (prevFlag ? colDefs.length - 1 : 0), {belirtec: tersColBelirtec} = colDefs[tersColInd];
+		let tersColInd = (prev ? colDefs.length - 1 : 0), {belirtec: tersColBelirtec} = colDefs[tersColInd];
 		selectCell(newRowIndex, tersColBelirtec); return this
 	}
 	selectNextEditableCell(e) {
@@ -927,13 +958,33 @@ class GridPart extends Part {
 		e = typeof e == 'object' ? { ...e  } : {};
 		e.prev = true; return this.selectEditableCell(e)
 	}
-	addNewRec(e) {
+	addRow(e) {
 		e = e ?? {}; let {gridWidget, builder, totalRecs} = this, sender = this, owner = gridWidget, {rec} = e;
 		let rowIndex = (e.rowIndex ?? this.selectedRowIndex) + 1, offset = e.after ?? e.afterIndex ?? e.offset;
 		let gridRec = this.newRec({ rec: e.rec }); gridWidget.addrow(null, gridRec, offset ?? 'last');
 		let {uid} = gridRec, rowCount = { yeni: totalRecs, eski: totalRecs - 1 };
 		setTimeout(() => this.gridSatirEklendi({ sender, builder, owner, rowIndex, uid, rowCount }), 5)
 		return rec
+	}
+	deleteRow(e) {
+		e = e ?? {}; let {gridWidget, builder, totalRecs, selectedRowIndexes, selectedBelirtec: belirtec} = this;
+		let gridPart = this, sender = gridPart, owner = gridWidget, {uids, recs, rowIndexes} = e;
+		rowIndexes = (rowIndexes ?? selectedRowIndexes)?.filter(x => x >= 0);
+		recs = (recs ?? rowIndexes?.map(i => gridWidget.getrowdata(i))).filter(x => x != null);
+		uids = (uids ?? recs?.map(rec => rec?.uid)).filter(x => x != null);
+		if (!uids?.length) { return [] }
+		let rowIndex = selectedRowIndexes[0] ?? 0, {length: deleteCount} = uids;
+		let targetRowIndex = Math.max(rowIndex + 1 >= totalRecs ? rowIndex - 1 : rowIndex, 0);
+		let _e = {
+			...e, sender, owner, builder, gridPart, gridWidget, totalRecs, selectedRowIndexes, belirtec,
+			deleteCount, targetRowIndex, uids, recs, rowIndexes, rowCount: { yeni: totalRecs - deleteCount, eski: totalRecs }
+		};
+		if (this.gridSatirSilinecek(_e) === false) { return [] }
+		gridWidget.deleterow(uids); gridWidget.clearselection();
+		if (this.isSelectionMode_cells) { gridWidget.selectcell(targetRowIndex, belirtec) }
+		else { gridWidget.selectrow(targetRowIndex) }
+		setTimeout(() => { this.gridSatirSilindi(_e) }, 10)
+		return recs
 	}
 	newRec(e) {
 		e = e || {}; let {gridWidget, grid} = this; if (!gridWidget && grid?.length) { gridWidget = this.gridWidget = grid.jqxGrid('getInstance') }
@@ -947,6 +998,16 @@ class GridPart extends Part {
 			if (rec) { cls = rec.class }
 		}
 		let {args} = e, result = cls ? new cls(args) : (args || {}); return result
+	}
+	signalColumnEvents(eventName, colNames, ...args) {
+		let {gridWidget, belirtec2Kolon} = this;
+		colNames = colNames
+			? $.makeArray(colNames?.belirtec || (colNames?.datafield ?? colNames))
+			: this.duzKolonTanimlari.filter(colDef => colDef.isEditable && gridWidget.iscolumnvisible(colDef.belirtec)).map(colDef => colDef.belirtec);
+		if (!colNames?.length) { return null }
+		let result; for (let belirtec of colNames) {
+			result = (belirtec2Kolon[belirtec]?.[eventName]?.(...args)) ?? result }
+		return result
 	}
 	onResize(e) {
 		super.onResize(e); clearTimeout(this._timer_gridResize); delete this._timer_gridResize;

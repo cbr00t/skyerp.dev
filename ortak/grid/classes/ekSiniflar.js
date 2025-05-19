@@ -8,31 +8,36 @@ class GridState extends CObject {
 	get hasFocus() { let {activeElement} = this; return (activeElement?.hasClass('jqx-grid') || !!activeElement?.parents('.jqx-grid')?.length) ?? false }
 	get targetIsGrid() { let {event, grid} = this; return grid && event?.target == grid }
 	get grid() { return this.gridPart?.grid } get gridWidget() { return this.gridPart?.gridWidget }
-	get dataView() { return this.gridPart?.dataView } get boundRecs() { return this.gridPart?.boundRecs } get totalRecs() { return this.gridPart.totalRecs }
+	get dataView() { return this.gridPart?.dataView } get boundRecs() { return this.gridPart?.boundRecs }
+	get totalRecs() { return this.gridPart?.totalRecs } get totalCols() { return this.gridPart?.totalCols }
 	get selectedCell() { return this.gridPart?.selectedCell } get editing() { return !!this.editCell }
+	get selectedRowIndex() { return this.gridPart?.selectedRowIndex } get selectedBelirtec() { return this.gridPart?.selectedBelirtec }
 	get editCell() { return this.gridPart?.editCell } get uid() { return this.gridWidget?.getrowid(this.rowIndex) }
 	get rowIndex() { return Math.max(this.selectedCell?.rowindex ?? 0, 0) } get belirtec() { return this.selectedCell?.datafield }
+	get colIndex() { return this.gridWidget?.getcolumnindex(this.belirtec) }
 	get selectedRec() { return this.gridPart?.selectedRec } get selectedRecs() { return this.gridPart?.selectedRecs }
 	get belirtec2Kolon() { return this.gridPart?.belirtec2Kolon } get colDef() { return this.belirtec2Kolon?.[this.belirtec] }
 	get jqxCol() { let {belirtec, gridWidget} = this; return belirtec ? gridWidget?.getcolumn(belirtec) : null }
 	get gridEditable() { return this.gridWidget?.editable } get colEditable() { return this.jqxCol?.editable }
+	get editable() { return this.gridEditable && this.colEditable } get sabitmi() { return this.gridPart.sabitFlag }
 	get canHandleEvents() {
-		let {gridWidget, activePart, isSubPart, eventTS, lastEventTS} = this;
+		let {gridWidget, activePart, isSubPart, activeElement, eventTS, lastEventTS} = this;
 		if (!gridWidget) { return false }
 		if (!!this.isSubPart && app.activePart && app.activePart != this) { return false }
 		if (lastEventTS && eventTS == lastEventTS) { return false }
+		if (activeElement?.[0].tagName?.toUpperCase() == 'TEXTAREA') { return false }
 		return true
 	}
 	get newEventArgs() {
 		let keyState = this, {
 			sender, builder, event, eventType, key, modifiers, hasModifiers, eventTS: timeStamp, targetIsGrid,
 			gridPart, grid, gridWidget, rowIndex, belirtec, colDef, jqxCol, selectedCell, editCell,
-			gridEditable, colEditable, result
+			gridEditable, colEditable, editable, result
 		} = this;
 		return {
 			keyState, sender, gridPart, builder, event, eventType, key, modifiers, hasModifiers, timeStamp, targetIsGrid,
 			gridPart, grid, gridWidget, rowIndex, belirtec, colDef, jqxCol, selectedCell, editCell,
-			gridEditable, colEditable, result
+			gridEditable, colEditable, editable, result
 		}
 	}
 	get tusaBasilincaBlock() { return this.gridPart?.tusaBasilincaBlock }
@@ -72,6 +77,7 @@ class GridKeyState extends GridState {
 	runInternal(e) { super.runInternal(e) }
 	signalEvents(e) {
 		super.signalEvents(e); let {gridPart, colDef, tusaBasilincaBlock: tusaBasilinca, newEventArgs} = this;
+		colDef = colDef ?? new GridKolon();
 		let _e = { ...e, ...newEventArgs }, result;
 		result = _e.result = colDef?.handleKeyboardNavigation?.(_e) ?? result;
 		result = _e.result = tusaBasilinca?.call(gridPart, _e) ?? result;

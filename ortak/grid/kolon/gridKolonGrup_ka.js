@@ -64,31 +64,47 @@ class GridKolonGrup_KA extends GridKolonGrup {
 					}).bosKodEklenir();
 					editor.data('part', part); part.run();
 					let tmpHandler_veriYuklenince = evt => {
-						part.input.off('bindingComplete', tmpHandler_veriYuklenince);
-						setTimeout(() => part.widget.input.select(), 100)
+						part.input.off('bindingComplete', tmpHandler_veriYuklenince)
+						// setTimeout(() => part.widget.input.select(), 1)
 					};
 					part.input.on('bindingComplete', tmpHandler_veriYuklenince);
 					part.change(_e => {
-						const {mfSinif, adiAttr} = this, {adiSaha} = mfSinif, {value, item} = _e, rec = gridWidget.getrowdata(rowIndex);
+						let {mfSinif, adiAttr} = this, {adiSaha} = mfSinif, {value, item} = _e, rec = gridWidget.getrowdata(rowIndex);
 						if (rec && item) { rec[adiAttr] = item[adiAttr] || item[adiSaha] || '' }
 						gridWidget.setcellvalue(rowIndex, kodAttr, value)
 						/*kaKolonu.cellValueChanged({ args: { owner: gridWidget, datafield: kodAttr, rowindex: rowIndex, oldvalue: prevValue, newvalue: value } })*/
 					});
-					const {widget} = part;
-					setTimeout(() => {
+					let {widget} = part; setTimeout(() => {
 						widget.input.on('keyup', evt => {
-							const key = (evt.key || '').toLowerCase();
-							if (key == 'enter' || key == 'linefeed') { widget.close(); if (gridWidget.editcell) { setTimeout(() => gridWidget.endcelledit(), 5) } }
+							let key = (evt.key || '').toLowerCase();
+							if (key == 'enter' || key == 'linefeed') {
+								widget.close();
+								if (gridWidget.editcell) { setTimeout(() => gridWidget.endcelledit(), 5) }
+							}
 						})
-					}, 500)
+					}, 10)
 				}
 			}
 			if (!kaKolonu.initEditor) {
-				kaKolonu.initEditor = (colDef, rowIndex, value, editor, cellText) => {
-					const part = editor.data('part'), {jqxSelector} = part; value = part.selectedItem?.[part.mfSinif?.adiSaha] ?? value;
-					if (part.input != editor) { part.input = editor; part.widget = editor[jqxSelector]('getInstance') }
+				kaKolonu.initEditor = (colDef, rowIndex, value, editor, cellText, pressedChar) => {
+					let part = editor.data('part'), {jqxSelector} = part, {input} = part;
+					value = pressedChar ?? part.selectedItem?.[part.mfSinif?.adiSaha] ?? value;
+					input = editor[jqxSelector]('input'); part.widget = editor[jqxSelector]('getInstance');
 					editor[jqxSelector]({ width: editor.width() }); part.val(value || '');
-					setTimeout(() => { editor[jqxSelector]('focus'); editor.select() }, 100)
+					editor[jqxSelector]('focus');
+					setTimeout(() => {
+						input.val(value || '');
+						if (pressedChar) {
+							input[0].setSelectionRange(value.length + 1, 1) }
+						else {
+							input.select();
+							let handler = evt => {
+								editor.off('bindingComplete', handler);
+								setTimeout(() => input.select(), 300)
+							};
+							editor.on('bindingComplete', handler);
+						}
+					}, 20)
 				}
 			}
 			if (!kaKolonu.getEditorValue) {
