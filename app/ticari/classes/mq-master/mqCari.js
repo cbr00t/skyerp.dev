@@ -646,7 +646,8 @@ class MQCari_EIslem extends MQCariAlt {
 	}
 	static loadServerData_queryDuzenle({ sent }) {
 		const {aliasVeNokta} = this.mfSinif;
-		sent.fromIliski(`efozelyontem efoy`, `${aliasVeNokta}efozelyontemkod = efoy.kod`).fromIliski(`eislemozeldip eiod`, `${aliasVeNokta}eislozeldipkod = eiod.kod`)
+		sent.fromIliski(`efozelyontem efoy`, `${aliasVeNokta}efozelyontemkod = efoy.kod`)
+			.fromIliski(`eislemozeldip eiod`, `${aliasVeNokta}eislozeldipkod = eiod.kod`)
 	}
 	static async ozelEntegratordenKontrolEtIstendi(e) {
 		e = e ?? {}; let {builder} = e, inst = e.inst ?? this.inst;
